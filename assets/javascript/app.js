@@ -1,6 +1,6 @@
 
 
-var queryURL = 'https://opentdb.com/api.php?amount=10&difficulty=medium&type=multiple';
+var queryURL = 'https://opentdb.com/api.php?amount=15&difficulty=medium&type=multiple';
 var questions = [];
 var questionBank = [];
 var questionAnswers = [];
@@ -54,6 +54,7 @@ function setQuestion() {
     var newQuestion = [a, b, c, d];
 
     var k = shuffle(newQuestion);
+
     //adds questions into question divs 
     for (let i = 0; i < newQuestion.length; i++) {
 
@@ -69,8 +70,9 @@ $(document).on("click", ".q0", function () {
     if (k == correctAnswer) {
 
         wins++;
-        $(".answer").text("CORRECT ANSWER!!");
+        $(".answer").text("CORRECT ANSWER!! ");
         $(".winLog").text('Wins: ' + wins);
+        middleCard();
 
     }
     else {
@@ -83,9 +85,10 @@ $(document).on('click', ".q1", function () {
     var k = $('.q1').text();
     if (k == correctAnswer) {
 
-        $('.answer').text("CORRECT ANSWER!!")
+        $('.answer').text("CORRECT ANSWER!! ")
         wins++;
         $('.winLog').text('Wins: ' + wins);
+        middleCard();
     }
     else {
         $('.answer').text("WRONG!  Correct Answer: " + correctAnswer)
@@ -97,9 +100,10 @@ $(document).on('click', ".q2", function () {
     var k = $('.q2').text();
     if (k == correctAnswer) {
 
-        $('.answer').text("CORRECT ANSWER!!")
+        $('.answer').text("CORRECT ANSWER!! ")
         wins++;
         $('.winLog').text('Wins: ' + wins);
+        middleCard();
     }
     else {
         $('.answer').text("WRONG!  Correct Answer: " + correctAnswer)
@@ -112,9 +116,10 @@ $(document).on('click', ".q3", function () {
 
     if (k == correctAnswer) {
 
-        $('.answer').text("CORRECT ANSWER!!")
+        $('.answer').text("CORRECT ANSWER!! ")
         wins++;
         $('.winLog').text('Wins: ' + wins);
+        middleCard();
     }
     else {
         $('.answer').text("WRONG!  Correct Answer: " + correctAnswer)
@@ -140,27 +145,42 @@ function shuffle(array) {
 
 
 
-var number = 25;
+var number = 0;
 var intervalId;
+var bool = false;
 function decrement() {
     number--;
     $("#show-number").html("<h2>" + number + "</h2>");
-    if (number === 0) {
-        stop();
+    if (number === 0 && bool == true) {
 
-        // alert("Time Up!");
-        count++;
-        setQuestion()
-        number = 25;
+        number = 15;
+        $('.answer').empty();
+        setQuestion();
+        bool = false;
+        $('.answer').empty();
     }
-
+    else if (number === 0 && bool == false) {
+        // setQuestion();
+        middleCard();
+    }
 }
 
 function run() {
+
     clearInterval(intervalId);
+    number = 15;
     intervalId = setInterval(decrement, 1000);
 }
+
+function middleCard() {
+
+    $('.answer').text('Correct Answer!' + questions[count].correct_answer);
+    count++;
+    clearInterval(intervalId);
+    number = 5;
+    intervalId = setInterval(decrement, 1000);
+    bool = true;
+
+}
+
 run();
-
-
-
