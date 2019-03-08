@@ -1,36 +1,41 @@
 
-var queryURL = 'https://opentdb.com/api.php?amount=3&difficulty=medium&type=multiple';
+
+var queryURL = 'https://opentdb.com/api.php?amount=10&difficulty=medium&type=multiple';
 var questions = [];
+var questionBank = [];
+var questionAnswers = [];
 var correctAnswer;
 var wins = 0;
 var loss = 0;
+var count = 0;
 
 $.ajax({
     url: queryURL,
     method: "GET"
 }).then(function (response) {
-    console.log(response);
+    // console.log(response);
 
     for (let i = 0; i < response.results.length; i++) {
 
+        var mystring = response.results[i].question;
+        mystring = mystring.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&eacute;/g, "é");
+
+        console.log(mystring);
+
+        // var string = mystring.replaceAll("^\"|\"$", "");
 
 
-        // if (response.question.indexOf('"') > -1) {
-        //     console.log('working');
-
-        //     myQuestion.replace('&#039', "'");
-        //     myQuestion.replace('&quot;', " ");
-        //     myQuestion.replace('&#039;', " ");
-
-        //     $(".ques").text(myQuestion);
-        // }
-        // else
 
         questions.push(response.results[i]);
+        // questionBank.push(response.results[i].question);
+        questionBank.push(mystring);
+        questionAnswers.push(response.results[i].correct_answer);
+
 
     }
-    correctAnswer = questions[0].correct_answer;
 
+    console.log(questionAnswers);
+    console.log(questionBank);
     setQuestion()
 })
 
@@ -39,126 +44,103 @@ function setQuestion() {
 
     $(".ques").empty();
     $(".quest").empty();
+    $(".ques").text(questionBank[count]);
+    var a = questions[count].incorrect_answers[0].replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&eacute;/g, "é");
+    var b = questions[count].incorrect_answers[1].replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&eacute;/g, "é");
+    var c = questions[count].incorrect_answers[2].replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&eacute;/g, "é");
+    var d = questions[count].correct_answer.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&eacute;/g, "é");
 
-    $(".ques").text(questions[0].question);
+    // var newQuestion = [questions[count].incorrect_answers[0], questions[count].incorrect_answers[1], questions[count].incorrect_answers[2], questions[count].correct_answer];
+    var newQuestion = [a, b, c, d];
 
-    // console.log(questions[0].incorrect_answers[0]);
-
-    var newQues = [questions[0].incorrect_answers[0], questions[0].incorrect_answers[1], questions[0].incorrect_answers[2], questions[0].correct_answer];
-    var correct = questions[0].correct_answer;
-
-    console.log(newQues);
-
-    var k = shuffle(newQues);
-
+    var k = shuffle(newQuestion);
     //adds questions into question divs 
-    for (let i = 0; i < newQues.length; i++) {
+    for (let i = 0; i < newQuestion.length; i++) {
 
         $('.q' + i).text(k[i]);
     }
+    correctAnswer = questions[count].correct_answer;
 
 }
 
-// $(document).on('click', ".q0", function () {
-//     console.log(this);
-//     var k = $('.q0').text();
-//     if (k == correctAnswer) {
-//         // alert("yeet");
-//         wins++;
-//         $('.answer').text("CORRECT ANSWER!!")
-//         $('.winLog').text(wins);
-//     }
-
-//     else {
-//         $('.answer').text("WRONG!  Correct Answer: " + correctAnswer)
-//         loss++;
-//         $('.lossLog').text(loss);
-//     }
-// })
 $(document).on("click", ".q0", function () {
-    console.log(this);
+
     var k = $(".q0").text();
     if (k == correctAnswer) {
-        // alert("yeet");
+
         wins++;
         $(".answer").text("CORRECT ANSWER!!");
-        $(".winLog").text(wins);
+        $(".winLog").text('Wins: ' + wins);
+
     }
     else {
         $(".answer").text("WRONG!  Correct Answer: " + correctAnswer);
         loss++;
-        $(".lossLog").text(loss);
+        $(".lossLog").text('Losses: ' + loss);
     }
 });
 $(document).on('click', ".q1", function () {
     var k = $('.q1').text();
     if (k == correctAnswer) {
-        // alert("yeet");
+
         $('.answer').text("CORRECT ANSWER!!")
         wins++;
-        $('.winLog').text(wins);
+        $('.winLog').text('Wins: ' + wins);
     }
     else {
         $('.answer').text("WRONG!  Correct Answer: " + correctAnswer)
         loss++;
-        $('.lossLog').text(loss);
+        $(".lossLog").text('Losses: ' + loss);
     }
 })
 $(document).on('click', ".q2", function () {
     var k = $('.q2').text();
     if (k == correctAnswer) {
-        // alert("yeet");
+
         $('.answer').text("CORRECT ANSWER!!")
         wins++;
-        $('.winLog').text(wins);
+        $('.winLog').text('Wins: ' + wins);
     }
     else {
         $('.answer').text("WRONG!  Correct Answer: " + correctAnswer)
         loss++;
-        $('.lossLog').text(loss);
+        $(".lossLog").text('Losses: ' + loss);
     }
 })
 $(document).on('click', ".q3", function () {
     var k = $('.q3').text();
 
     if (k == correctAnswer) {
-        // alert("yeet");
+
         $('.answer').text("CORRECT ANSWER!!")
         wins++;
-        $('.winLog').text(wins);
+        $('.winLog').text('Wins: ' + wins);
     }
     else {
         $('.answer').text("WRONG!  Correct Answer: " + correctAnswer)
         loss++;
-        $('.lossLog').text(loss);
+        $(".lossLog").text('Losses: ' + loss);
     }
 })
 
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
-
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
-
         // Pick a remaining element...
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
-
         // And swap it with the current element.
         temporaryValue = array[currentIndex];
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
-
     return array;
 }
 
-// function run() {
 
-//     clearInterval(intervalId);
-//     intervalId = setInterval(decrement, 1500);
-// }
-var number = 5;
+
+var number = 25;
 var intervalId;
 function decrement() {
     number--;
@@ -166,7 +148,10 @@ function decrement() {
     if (number === 0) {
         stop();
 
-        alert("Time Up!");
+        // alert("Time Up!");
+        count++;
+        setQuestion()
+        number = 25;
     }
 
 }
