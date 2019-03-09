@@ -22,9 +22,42 @@
 
         <div class="container">
             <h2 class="display-4">TRIVIA GAME</h2>
+            <div class='askForm'>
+                <div>
+                    Number Of Questions
+                    <select class="form-control nQ">
+
+                        <option>5</option>
+                        <option>10</option>
+                        <option>15</option>
+                        <option>20</option>
+                    </select>
+                </div>
+                <div>
+                    Difficulty
+                    <select class="form-control diff">
+
+                        <option>Hard</option>\
+                        <option>Medium</option>
+                        <option>Easy</option>
+                    </select>
+                </div>
+
+                <div>
+                    Genre
+                    <select class="form-control genre">
+
+                        <option>Hard</option>\
+                        <option>Medium</option>
+                        <option>Easy</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class='gameStart'>Start</button>
 
             <p class="lead ques">
-
+                <p class="gameOver"></p>
             </p>
             <div class="questionContainer">
                 <div class='quest q0'> </div>
@@ -38,8 +71,8 @@
             <br>
             <div class='answer'></div>
 
-            <span class="winLog"></span>
-            <span class="lossLog"></span>
+            <div class="winLog"></div>
+            <div class="lossLog"></div>
         </div>
     </div>
 
