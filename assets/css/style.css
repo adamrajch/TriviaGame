@@ -45,10 +45,10 @@
 
 }
 .lossLog{
-    font-size:18px;
+    font-size:24px;
 }
-.winLog{
-    font-size:18px;
+.winLog .answer{
+    font-size:24px;
 }
 .quest{
     width: 500px;
@@ -64,4 +64,25 @@
     margin:auto;
     font-size: 32px;
     color: pink;
+}
+.form-control{
+    color:blue;
+}
+.highlight
+ {
+
+    /* background-color: plum; */
+    border-width: 2px;
+    border-style: solid;
+    border-color: goldenrod;
+
+}
+.wrongHL{
+    background-color: red;
+}
+.gameStart{
+    margin-top:10px
+}
+.newGame{
+    margin-top:10px;
 }

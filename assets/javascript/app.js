@@ -11,20 +11,41 @@ $(document).ready(function () {
     var wins = 0;
     var loss = 0;
     var count = 0;
+    var time = 15;
 
+    $('.gameStart').on('click', function yeetyah() {
 
-    $('.gameStart').on('click', function () {
-
-        console.log($('.diff').val())
         var nmbQ = $('.nQ').val()
         var diff = $('.diff').val()
         var genre = $('.genre').val()
+        var genreVal;
+        if (genre == "Anime") {
+            genreVal = '31';
+        }
+        else if (genre == 'General Knowledge') {
+            genreVal = '9';
+        }
+        else if (genre == 'Science and Nature') {
+            genreVal = '17';
+        }
+        else if (genre == 'Mythology') {
+            genreVal = '20';
+        }
+        else if (genre == 'Animals') {
+            genreVal = '27';
+        }
+        else if (genre == 'Movies') {
+            genreVal = '11';
+        }
+
+        var newURL = 'https://opentdb.com/api.php?amount=' + nmbQ + '&category=' + genreVal + '&difficulty=' + diff + '&type=multiple'
 
         $('.gameStart').css({ 'display': 'none' })
+        $('.askForm').css({ 'display': 'none' })
 
 
         $.ajax({
-            url: queryURL,
+            url: newURL,
             method: "GET"
         }).then(function (response) {
 
@@ -32,19 +53,22 @@ $(document).ready(function () {
 
                 var mystring = response.results[i].question;
                 mystring = mystring.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&eacute;/g, "é");
-
-                console.log(mystring);
                 questions.push(response.results[i]);
                 questionBank.push(mystring);
                 questionAnswers.push(response.results[i].correct_answer);
             }
             setQuestion()
         })
+
     })
 
     function setQuestion() {
 
         if (count < questions.length) {
+            run();
+            $('.quest').css({ 'pointer-events': 'auto' })
+            $('.quest').removeClass('wrongHL');
+            $('.quest').removeClass('highlight');
             $('.answer').empty();
             correctAnswer = questions[count].correct_answer;
             $(".ques").empty();
@@ -65,6 +89,7 @@ $(document).ready(function () {
             endScreen();
         }
         count++;
+
     }
 
     $(document).on('click', '.quest', function () {
@@ -72,10 +97,19 @@ $(document).ready(function () {
         var k = $(this).text();
         if (k == correctAnswer) {
             gotRight();
+            $(this).addClass('highlight');
         }
         else {
             gotWrong();
+            $(this).addClass('wrongHL');
+            for (let i = 0; i < 4; i++) {
+                if ($('.q' + i).text() == correctAnswer) {
+                    $('.q' + i).addClass('highlight');
+                }
+
+            }
         }
+        $('.quest').css({ 'pointer-events': 'none' })
     })
 
     function shuffle(array) {
@@ -95,6 +129,7 @@ $(document).ready(function () {
 
     var myVar;
     function gotRight() {
+        stop();
         wins++;
         $(".answer").text("Correct Answer! Nice job ;)");
         $(".winLog").text('Wins: ' + wins);
@@ -102,14 +137,27 @@ $(document).ready(function () {
     }
 
     function gotWrong() {
+        stop()
         loss++;
         $(".answer").text("WRONG!  Correct Answer: " + correctAnswer);
         $(".lossLog").text('Losses: ' + loss);
-        // setTimeout(setQuestion(), 5000);
+        myVar = setTimeout(setQuestion, 3000)
+
+    }
+    function timeLoss() {
+        stop()
+        loss++;
+        $(".answer").text("Times Up!  Correct Answer: " + correctAnswer);
+        $(".lossLog").text('Losses: ' + loss);
         myVar = setTimeout(setQuestion, 3000)
     }
 
     function endScreen() {
+        console.log('working! eS')
+        stop();
+
+
+        // $('#show-number').css({ 'display': 'none' })
         $('.answer').empty();
         $('.winLog').empty();
         $('.lossLog').empty();
@@ -117,45 +165,40 @@ $(document).ready(function () {
         $('.questionContainer').empty();
         $('.gameOver').html('SCORE: <br>' + wins + ' CORRECT <br>' + loss + ' INCORRECT')
 
+        var newGame = $('<button>').text('New Game?')
+        $('.newGame').append(newGame);
+
+    }
+    $('.newGame').on('click', function () {
+        location.reload();
+    })
+    var intervalId;
+
+    function decrement() {
+
+        if (time == 0) {
+            clearInterval(intervalId)
+            timeLoss()
+        }
+        else {
+            time--;
+            $("#show-number").html("<h2>" + time + "</h2>");
+        }
+
+    }
+    function stop() {
+        // console.log('stop working!')
+        clearInterval(intervalId);
+        $('#show-number').css({ 'display': 'none' })
+        time = 15;
+    }
+
+    function run() {
+        clearInterval(intervalId);
+        time = 15;
+        $('#show-number').css({ 'display': 'initial' })
+        intervalId = setInterval(decrement, 1000);
+
     }
 
 })
-// var number = 0;
-// var intervalId;
-// var bool = false;
-// function decrement() {
-//     number--;
-//     $("#show-number").html("<h2>" + number + "</h2>");
-//     if (number === 0 && bool == true) {
-
-//         number = 15;
-//         $('.answer').empty();
-//         setQuestion();
-//         bool = false;
-//         $('.answer').empty();
-//     }
-//     else if (number === 0 && bool == false) {
-//         // setQuestion();
-//         middleCard();
-//     }
-// }
-
-// function run() {
-
-//     clearInterval(intervalId);
-//     number = 15;
-//     intervalId = setInterval(decrement, 1000);
-// }
-
-// function middleCard() {
-
-//     $('.answer').text('Correct Answer!' + questions[count].correct_answer);
-//     count++;
-//     clearInterval(intervalId);
-//     number = 5;
-//     intervalId = setInterval(decrement, 1000);
-//     bool = true;
-
-// }
-
-// run();
